@@ -21,4 +21,5 @@
 
 ### exclusions persos
 .idea/
+/migrations/*.php
 ###
