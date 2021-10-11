@@ -44,6 +44,19 @@
                     <li class="nav-item">
                         <a class="nav-link{{ route == 'main_home' ? ' active' }}" href="{{ path('main_home') }}"><i class="fas fa-home mx-1"></i>Accueil</a>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-newspaper me-1"></i>Blog
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">......</a></li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ path('blog_new_publication') }}">Nouvelle Publication</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
                 </ul>
 
                 {# Paquet des boutons de droite #}
