@@ -96,10 +96,6 @@ class RegistrationFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
 
-            // TODO: Penser à virer ça
-            'attr' => [
-                'novalidate' => 'novalidate'
-            ],
         ]);
     }
 }
