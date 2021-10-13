@@ -10,14 +10,16 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
+     * Page de connexion
+     *
      * @Route("/connexion/", name="app_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-         // SI l'utilisateur est déjà connecté on le redirigie sur l'accueil
-         if ($this->getUser()) {
-             return $this->redirectToRoute('main_home');
-         }
+        // Si l'utilisateur est déjà connecté, on le redirige sur l'accueil
+        if ($this->getUser()) {
+            return $this->redirectToRoute('main_home');
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -28,13 +30,15 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * page de déconnexion
+     * Page de déconnexion
      *
-     * @Route("/déconnexion", name="app_logout")
+     * @Route("/deconnexion/", name="app_logout")
      */
     public function logout(): void
     {
-        // le code ici ne sera jamais lu car intercepté par le bundle sécurity
+
+        // Le code ici ne sera jamais lu (intercepté par le bundle security)
+
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

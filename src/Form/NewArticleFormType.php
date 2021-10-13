@@ -3,10 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Article;
-use Doctrine\DBAL\Types\TextType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -17,11 +18,13 @@ class NewArticleFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title',TextType::class, [
+
+            // Champ titre
+            ->add('title', TextType::class, [
                 'label' => 'Titre',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Merci de renseigner un titre'
+                        'message' => 'Merci de renseigner un titre',
                     ]),
                     new Length([
                         'min' => 2,
@@ -32,28 +35,31 @@ class NewArticleFormType extends AbstractType
                 ],
             ])
 
-
-            ->add('content', TextareaType::class, [
+            // Champ contenu
+            ->add('content', CKEditorType::class, [
                 'label' => 'Contenu',
+                'attr' => [
+                    'class' => 'd-none',
+                ],
+                'purify_html' => true,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Merci de renseigner un contenu'
+                        'message' => 'Merci de renseigner un contenu',
                     ]),
                     new Length([
                         'min' => 2,
-                        'minMessage' => 'Le titre doit contenir au moins {{ limit }} caractères',
+                        'minMessage' => 'Le contenu doit contenir au moins {{ limit }} caractères',
                         'max' => 50000,
-                        'maxMessage' => 'Le titre doit contenir au maximum {{ limit }} caractères',
+                        'maxMessage' => 'Le contenu doit contenir au maximum {{ limit }} caractères',
                     ]),
                 ],
             ])
 
-
-
+            // Bouton de validation
             ->add('save', SubmitType::class, [
-                'label' => 'publier',
+                'label' => 'Publier',
                 'attr' => [
-                    'class' => 'btn btn-outline-primary w-100'
+                    'class' => 'btn btn-outline-primary w-100',
                 ],
             ])
         ;
@@ -63,6 +69,11 @@ class NewArticleFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Article::class,
+
+            // TODO: À enlever
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ],
         ]);
     }
 }

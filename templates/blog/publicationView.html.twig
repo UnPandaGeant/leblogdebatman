@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+
+{% block body %}
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <h1 class="col-12 text-center my-5">{{ article.title }}</h1>
+        </div>
+
+        <div class="row">
+            <p class="text-center col-12">
+                <a class="text-decoration-none" href="{{ path('blog_publication_list') }}">Retour liste des articles</a>
+            </p>
+        </div>
+
+        <div class="row">
+
+            <div class="col-12 col-md-8 offset-md-2">
+
+                <div class="card my-2 bg-black">
+
+                    <div class="card-body">
+
+                        <footer class="blockquote-footer mt-0 mb-4">Publié le <strong class="text-light">{{ article.publicationDate|date('d/m/Y à H\\hi') }}</strong> par <strong class="text-light">{{ article.author.pseudonym }}</strong></footer>
+
+                        <div class="mb-2">
+                            {{ article.content|purify }}
+                        </div>
+
+                        {% if is_granted('ROLE_ADMIN') %}
+
+                            <p class="mb-0 mt-3">
+
+                                <a href="{{ path('blog_publication_edit', {'id': 'article.id'}) }}" class="text-warnig me-3 text-decoration-none">
+                                    <i class="fas fa-edit me-1">modifier</i>
+                                </a>
+
+                                <a onclick="return confirm('Etes vous sur de vouloir supprimer cette publication ?')" class="text-decoration-none text-danger" href="{{ path('blog_publication_delete', {'id': article.id, csrf_token: csrf_token('blog_publication_delete_' ~ article.id ) }) }}"><i class="fas fa-trash-alt me-1"></i>Supprimer</a>
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
