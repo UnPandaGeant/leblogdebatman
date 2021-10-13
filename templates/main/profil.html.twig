@@ -22,8 +22,13 @@
 
                         {# Image de profil #}
                         <div class="row">
-                            <div class="col-12 profil-photo mx-2 d-flex justify-content-center align-items-center">
+                            <div class="col-10 offset-1 d-flex justify-content-center align-items-center">
 
+                                {% if app.user.photo is null %}
+                                    <img src="{{ asset('images/profil_default.jpg')|imagine_filter('profil') }}" alt="" class="img-fluid img-thumbnail">
+                                {% else %}
+                                    <img src="{{ asset('images/profil/'~ app.user.photo)|imagine_filter('profil') }}" alt="" class="img-fluid img-thumbnail">
+                                {% endif %}
 
                             </div>
                         </div>
@@ -31,7 +36,7 @@
                         {# Lien vers la page permettant de changer de photo de profil #}
                         <div class="row">
                             <div class="col-12 pt-3">
-                                <a href="#">Modifier la photo de profil</a>
+                                <a href="{{ path('main-edit-photo') }}">Modifier la photo de profil</a>
                             </div>
                         </div>
                     </div>
