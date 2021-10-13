@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Comment;
+use App\Form\CommentFormType;
 use App\Form\NewArticleFormType;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
@@ -100,11 +102,45 @@ class BlogController extends AbstractController
      *
      * @Route("/publication/{slug}/", name="publication_view")
      */
-    public function publicationView(Article $article): Response
+    public function publicationView(Article $article, Request $request): Response
     {
+
+        if(!$this->getUser()){
+            return $this->render('blog/publicationView.html.twig', [
+                'article' => $article,
+            ]);
+        }
+
+        $comment = new Comment();
+
+        $form = $this->createForm(CommentFormType::class, $comment);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $comment
+                ->setPublicationDate(new DateTime())
+                ->setArticle($article)
+                ->setAuthor($this->getUser())
+            ;
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre commentaire à été publié avec succes');
+
+            unset($comment);
+            unset($form);
+            $comment = new Comment();
+            $form = $this->createForm(CommentFormType::class, $comment);
+
+        }
 
         return $this->render('blog/publicationView.html.twig', [
             'article' => $article,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -203,6 +239,7 @@ class BlogController extends AbstractController
                 'slug'=>$article->getSlug(),
             ]);
         }
+
         return $this->render('blog/publicationEdit.html.twig', [
             'form' => $form->createView(),
         ]);
